@@ -1,0 +1,83 @@
+import { useState, useEffect } from 'react';
+import Head from 'next/head';
+import { Home, MessageCircle, User, Plus, Settings, MapPin } from 'lucide-react';
+// 카카오맵 SDK (실제 연동 전까지는 주석 처리 또는 에러 방지용으로 둡니다)
+// import { Map, CustomOverlayMap } from 'react-kakao-maps-sdk';
+
+export default function Index() {
+  // 백엔드에서 받아올 주변 마커(게시글) 임시 데이터
+  const [posts, setPosts] = useState([
+    { id: 1, place_name: '바이브 카페', imgUrl: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=150&q=80', lat: 37.1498, lng: 127.0773 },
+    { id: 2, place_name: '오산천 산책로', imgUrl: 'https://images.unsplash.com/photo-1519331379826-f10be5486c6f?auto=format&fit=crop&w=150&q=80', lat: 37.1520, lng: 127.0750 },
+  ]);
+
+  return (
+    <div className="relative w-full h-screen bg-[#e5e3df] overflow-hidden">
+      <Head>
+        <title>바이브 - 우리 동네 소셜 지도</title>
+      </Head>
+
+      {/* 1. 지도 영역 (전체 화면) */}
+      <div className="absolute inset-0 z-0 flex flex-col items-center justify-center">
+        {/* 실제 카카오맵 컴포넌트가 들어갈 자리 */}
+        <p className="text-gray-500 font-medium mb-4">🗺️ 카카오맵 렌더링 영역</p>
+
+        {/* 인스타 감성 포토 마커 렌더링 (임시 UI) */}
+        <div className="relative w-full max-w-md h-64 border-2 border-dashed border-gray-400 rounded-xl bg-gray-100 flex items-center justify-center">
+          {posts.map((post, idx) => (
+            <div 
+              key={post.id} 
+              className={`absolute flex flex-col items-center ${idx === 0 ? 'top-10 left-10' : 'bottom-10 right-20'}`}
+            >
+              <div className="w-16 h-16 rounded-full border-4 border-rose-500 shadow-lg overflow-hidden cursor-pointer transform transition hover:scale-110">
+                <img src={post.imgUrl} alt={post.place_name} className="w-full h-full object-cover" />
+              </div>
+              <span className="mt-1 px-2 py-1 bg-white text-xs font-bold rounded-full shadow-md">
+                {post.place_name}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 2. 우측 상단 지역 설정 버튼 */}
+      <button className="absolute top-6 right-6 z-10 flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-md text-sm font-semibold text-gray-700 hover:bg-gray-50">
+        <MapPin size={16} className="text-rose-500" />
+        오산시청 앞
+        <Settings size={16} className="ml-1 text-gray-400" />
+      </button>
+
+      {/* 3. 하단 네비게이션 바 */}
+      <div className="absolute bottom-0 w-full h-20 bg-white border-t border-gray-200 z-10 flex justify-around items-center pb-safe px-4 rounded-t-3xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+        
+        <div className="flex flex-col items-center cursor-pointer text-gray-400 hover:text-rose-500 transition-colors">
+          <Home size={24} />
+          <span className="text-[10px] mt-1 font-medium">홈</span>
+        </div>
+        
+        <div className="flex flex-col items-center cursor-pointer text-gray-400 hover:text-rose-500 transition-colors mr-8">
+          <MessageCircle size={24} />
+          <span className="text-[10px] mt-1 font-medium">메시지</span>
+        </div>
+
+        {/* 중앙 플로팅 글쓰기 버튼 */}
+        <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 cursor-pointer">
+          <div className="w-16 h-16 bg-rose-500 rounded-full flex items-center justify-center text-white shadow-[0_8px_16px_rgba(244,63,94,0.4)] hover:bg-rose-600 hover:scale-105 transition-all">
+            <Plus size={32} strokeWidth={2.5} />
+          </div>
+        </div>
+
+        <div className="flex flex-col items-center cursor-pointer text-gray-400 hover:text-rose-500 transition-colors ml-8">
+          <MapPin size={24} />
+          <span className="text-[10px] mt-1 font-medium">내 글</span>
+        </div>
+
+        <div className="flex flex-col items-center cursor-pointer text-gray-400 hover:text-rose-500 transition-colors">
+          <User size={24} />
+          <span className="text-[10px] mt-1 font-medium">프로필</span>
+        </div>
+
+      </div>
+    </div>
+  );
+}
