@@ -1,3 +1,5 @@
+# Flask 메인 서버 (모바일 앱과 통신)
+
 from flask import Flask, jsonify
 from flask_cors import CORS # 프론트-유니티 통신을 위해 필수
 
