@@ -1,1 +1,13 @@
-# Rust 설정 파일
+use pyo3::prelude::*;
+
+// 파이썬에서 호출할 테스트 함수
+#[pyfunction]
+fn rust_health_check() -> PyResult<String> {
+    Ok("Rust 엔진 정상 작동 중! 도시 개발 데이터 처리 준비 완료.".to_string())
+}
+
+#[pymodule]
+fn geo_engine(_py: Python, m: &PyModule) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(rust_health_check, m)?)?;
+    Ok(())
+}
